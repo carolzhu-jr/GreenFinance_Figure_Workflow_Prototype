@@ -1,0 +1,140 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Style Profile Schema",
+  "description": "A JSON Schema for visualization style profiles used across prototype pipelines.",
+  "type": "object",
+  "required": ["name", "version", "colors", "fonts", "canvas"],
+  "properties": {
+    "name": { "type": "string" },
+    "version": { "type": "string" },
+    "description": { "type": "string" },
+    "colors": {
+      "type": "object",
+      "description": "Named color tokens and global palettes",
+      "properties": {
+        "primary": { "type": "string", "pattern": "^#([A-Fa-f0-9]{6})$" },
+        "accent": { "type": "string", "pattern": "^#([A-Fa-f0-9]{6})$" },
+        "muted": { "type": "string", "pattern": "^#([A-Fa-f0-9]{6})$" },
+        "background": { "type": "string", "pattern": "^#([A-Fa-f0-9]{6})$" },
+        "text": { "type": "string", "pattern": "^#([A-Fa-f0-9]{6})$" },
+        "danger": { "type": "string", "pattern": "^#([A-Fa-f0-9]{6})$" }
+      },
+      "additionalProperties": { "type": "string" }
+    },
+    "colormaps": {
+      "type": "object",
+      "description": "Named small palettes or full colormaps as arrays of hex colors",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string", "pattern": "^#([A-Fa-f0-9]{6})$" }
+      }
+    },
+    "fonts": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "object",
+          "properties": {
+            "family": { "type": "string" },
+            "size": { "type": "number" },
+            "weight": { "type": "string" }
+          }
+        },
+        "label": {
+          "type": "object",
+          "properties": {
+            "family": { "type": "string" },
+            "size": { "type": "number" },
+            "weight": { "type": "string" }
+          }
+        },
+        "annotation": {
+          "type": "object",
+          "properties": {
+            "family": { "type": "string" },
+            "size": { "type": "number" }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "canvas": {
+      "type": "object",
+      "description": "Figure/canvas sizes and DPI",
+      "properties": {
+        "width_px": { "type": "number" },
+        "height_px": { "type": "number" },
+        "units": { "type": "string", "enum": ["px", "in", "cm", "mm"] },
+        "dpi": { "type": "number" }
+      }
+    },
+    "line": {
+      "type": "object",
+      "properties": {
+        "width": { "type": "number" },
+        "style": { "type": "string" },
+        "dash": { "type": "array", "items": { "type": "number" } },
+        "marker_size": { "type": "number" }
+      }
+    },
+    "errorbars": {
+      "type": "object",
+      "properties": {
+        "cap_size": { "type": "number" },
+        "line_width": { "type": "number" }
+      }
+    },
+    "grid": {
+      "type": "object",
+      "properties": {
+        "show": { "type": "boolean" },
+        "color": { "type": "string", "pattern": "^#([A-Fa-f0-9]{6})$" },
+        "linewidth": { "type": "number" },
+        "linestyle": { "type": "string" },
+        "alpha": { "type": "number" }
+      }
+    },
+    "legend": {
+      "type": "object",
+      "properties": {
+        "fontsize": { "type": "number" },
+        "location": { "type": "string" },
+        "frame": { "type": "boolean" },
+        "frame_alpha": { "type": "number" }
+      }
+    },
+    "table": {
+      "type": "object",
+      "properties": {
+        "header_fill": { "type": "string", "pattern": "^#([A-Fa-f0-9]{6})$" },
+        "header_text_color": { "type": "string", "pattern": "^#([A-Fa-f0-9]{6})$" },
+        "cell_padding": { "type": "number" },
+        "border_color": { "type": "string", "pattern": "^#([A-Fa-f0-9]{6})$" }
+      }
+    },
+    "plot_tokens": {
+      "type": "object",
+      "description": "Plot-specific tokens that pipelines can read for fine-grained control",
+      "properties": {
+        "bar_width": { "type": "number" },
+        "violin_width": { "type": "number" },
+        "marker_size": { "type": "number" },
+        "heatmap_interp": { "type": "string" },
+        "hist_bins": { "type": "integer" }
+      }
+    },
+    "node": {
+      "type": "object",
+      "properties": {
+        "default_width": { "type": "number" },
+        "default_height": { "type": "number" },
+        "rx": { "type": "number" },
+        "fill": { "type": "string" },
+        "stroke": { "type": "string" },
+        "stroke_width": { "type": "number" },
+        "label_color": { "type": "string" }
+      }
+    }
+  },
+  "additionalProperties": false
+}

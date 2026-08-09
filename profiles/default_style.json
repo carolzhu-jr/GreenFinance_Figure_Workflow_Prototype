@@ -1,23 +1,68 @@
 {
   "name": "greenfinance-academic",
-  "version": "0.1",
-  "description": "A small, human-editable visualization style profile for academic figures.",
+  "version": "0.2",
+  "description": "Expanded human-editable visualization style profile for the GreenFinance prototype.",
   "colors": {
     "primary": "#1b7a4a",
     "accent": "#ffd166",
     "muted": "#9aa6a6",
     "background": "#ffffff",
     "text": "#111111",
-    "danger": "#d62828"
+    "danger": "#d62828",
+    "grid": "#e6e6e6",
+    "axis": "#333333"
+  },
+  "colormaps": {
+    "greenfinance": ["#e6f4ea", "#c1e6c9", "#7fd09a", "#2f9d63", "#1b7a4a"],
+    "qualitative": ["#1b7a4a", "#ffd166", "#4a90e2", "#d62828", "#8e44ad"],
+    "viridis": ["#440154", "#3b528b", "#21918c", "#5cc863", "#fde725"]
   },
   "fonts": {
+    "title": { "family": "DejaVu Sans", "size": 14, "weight": "bold" },
     "label": { "family": "DejaVu Sans", "size": 12, "weight": "normal" },
-    "title": { "family": "DejaVu Sans", "size": 14, "weight": "bold" }
+    "annotation": { "family": "DejaVu Sans", "size": 10 }
+  },
+  "canvas": {
+    "width_px": 1200,
+    "height_px": 800,
+    "units": "px",
+    "dpi": 96
   },
   "line": {
     "width": 1.5,
     "style": "solid",
-    "arrow": { "size": 6 }
+    "dash": [],
+    "marker_size": 6
+  },
+  "errorbars": {
+    "cap_size": 4,
+    "line_width": 1.2
+  },
+  "grid": {
+    "show": true,
+    "color": "#e6e6e6",
+    "linewidth": 1,
+    "linestyle": "dashed",
+    "alpha": 0.9
+  },
+  "legend": {
+    "fontsize": 11,
+    "location": "best",
+    "frame": false,
+    "frame_alpha": 0.9
+  },
+  "table": {
+    "header_fill": "#f3f6f5",
+    "header_text_color": "#111111",
+    "cell_padding": 6,
+    "border_color": "#e6e6e6"
+  },
+  "plot_tokens": {
+    "bar_width": 0.8,
+    "violin_width": 0.8,
+    "marker_size": 6,
+    "heatmap_interp": "nearest",
+    "hist_bins": 30
   },
   "node": {
     "default_width": 140,
@@ -27,10 +72,5 @@
     "stroke": "#1b7a4a",
     "stroke_width": 1.2,
     "label_color": "#111111"
-  },
-  "canvas": {
-    "width_px": 1200,
-    "height_px": 800,
-    "margin_px": 24
   }
 }
