@@ -1,0 +1,36 @@
+{
+  "name": "greenfinance-academic",
+  "version": "0.1",
+  "description": "A small, human-editable visualization style profile for academic figures.",
+  "colors": {
+    "primary": "#1b7a4a",
+    "accent": "#ffd166",
+    "muted": "#9aa6a6",
+    "background": "#ffffff",
+    "text": "#111111",
+    "danger": "#d62828"
+  },
+  "fonts": {
+    "label": { "family": "DejaVu Sans", "size": 12, "weight": "normal" },
+    "title": { "family": "DejaVu Sans", "size": 14, "weight": "bold" }
+  },
+  "line": {
+    "width": 1.5,
+    "style": "solid",
+    "arrow": { "size": 6 }
+  },
+  "node": {
+    "default_width": 140,
+    "default_height": 44,
+    "rx": 6,
+    "fill": "#ffffff",
+    "stroke": "#1b7a4a",
+    "stroke_width": 1.2,
+    "label_color": "#111111"
+  },
+  "canvas": {
+    "width_px": 1200,
+    "height_px": 800,
+    "margin_px": 24
+  }
+}

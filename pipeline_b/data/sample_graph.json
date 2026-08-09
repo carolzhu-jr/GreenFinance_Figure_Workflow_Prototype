@@ -1,0 +1,12 @@
+{
+  "meta": { "id": "sample-1", "title": "Simple flow" },
+  "nodes": [
+    { "id": "n1", "label": "Emissions Data", "x": 160, "y": 160 },
+    { "id": "n2", "label": "Processing", "x": 420, "y": 160 },
+    { "id": "n3", "label": "Plot / Figure", "x": 680, "y": 160 }
+  ],
+  "edges": [
+    { "id": "e1", "source": "n1", "target": "n2", "label": "clean" },
+    { "id": "e2", "source": "n2", "target": "n3", "label": "summarize" }
+  ]
+}

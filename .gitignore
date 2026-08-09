@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+.DS_Store
+.env
+.env.*
+.pipeline/
+.vscode/
+.idea/
+.pipeline_b/examples/*.svg

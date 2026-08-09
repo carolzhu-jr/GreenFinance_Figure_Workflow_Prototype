@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <desc>{"title": "Simple flow", "source": "pipeline_b/data/sample_graph.json"}</desc>
+  <!-- Edge e1 -->
+  <g id="edge-e1" class="edge">
+    <desc>{"id": "e1", "source": "n1", "target": "n2"}</desc>
+    <line x1="160" y1="160" x2="420" y2="160" stroke="#9aa6a6" stroke-width="1.5" />
+  </g>
+  <!-- Edge e2 -->
+  <g id="edge-e2" class="edge">
+    <desc>{"id": "e2", "source": "n2", "target": "n3"}</desc>
+    <line x1="420" y1="160" x2="680" y2="160" stroke="#9aa6a6" stroke-width="1.5" />
+  </g>
+  <!-- Node n1 -->
+  <g id="node-n1" class="node" transform="translate(160,160)">
+    <desc>{"id": "n1", "label": "Emissions Data"}</desc>
+    <rect x="-70" y="-22" width="140" height="44" rx="6" fill="#ffffff" stroke="#1b7a4a" stroke-width="1.2" />
+    <text x="-60" y="6" fill="#111111" font-size="12">Emissions Data</text>
+  </g>
+  <!-- Node n2 -->
+  <g id="node-n2" class="node" transform="translate(420,160)">
+    <desc>{"id": "n2", "label": "Processing"}</desc>
+    <rect x="-70" y="-22" width="140" height="44" rx="6" fill="#ffffff" stroke="#1b7a4a" stroke-width="1.2" />
+    <text x="-58" y="6" fill="#111111" font-size="12">Processing</text>
+  </g>
+  <!-- Node n3 -->
+  <g id="node-n3" class="node" transform="translate(680,160)">
+    <desc>{"id": "n3", "label": "Plot / Figure"}</desc>
+    <rect x="-70" y="-22" width="140" height="44" rx="6" fill="#ffffff" stroke="#1b7a4a" stroke-width="1.2" />
+    <text x="-58" y="6" fill="#111111" font-size="12">Plot / Figure</text>
+  </g>
+</svg>

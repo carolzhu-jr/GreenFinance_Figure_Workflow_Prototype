@@ -1,0 +1,8 @@
+- id: concept-climate-finance-1
+  title: "Concept: Carbon price & investment flow"
+  prompt: |
+    A clean, schematic, conceptual illustration showing carbon pricing pushing private investment into green infrastructure.
+    Flat vector style, limited palette (use primary/accent from provided style profile), no new scientific claims.
+  model: stub
+  seed: 12345
+  notes: "Human-review required; images are for inspiration only."
