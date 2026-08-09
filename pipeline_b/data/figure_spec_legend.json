@@ -1,0 +1,25 @@
+{
+  "meta": { "title": "Legend example" },
+  "data": [
+    {
+      "name": "series1",
+      "values": [
+        { "x": 0, "y": 1, "cat": "A" },
+        { "x": 1, "y": 2, "cat": "B" },
+        { "x": 2, "y": 1.5, "cat": "C" },
+        { "x": 3, "y": 3, "cat": "A" }
+      ]
+    }
+  ],
+  "scales": {
+    "xscale": { "type": "linear", "domain": [0, 3] },
+    "yscale": { "type": "linear", "domain": [0, 4] }
+  },
+  "axes": [
+    { "orient": "bottom", "scale": "xscale", "ticks": 4 },
+    { "orient": "left", "scale": "yscale", "ticks": 4 }
+  ],
+  "marks": [
+    { "type": "point", "from": "series1", "encoding": { "x": { "field": "x", "scale": "xscale" }, "y": { "field": "y", "scale": "yscale" }, "color": { "field": "cat", "map": "qualitative" }, "size": { "value": 6 } }, "layer": "marks" }
+  ]
+}

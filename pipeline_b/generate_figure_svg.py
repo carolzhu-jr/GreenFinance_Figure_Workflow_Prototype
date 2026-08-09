@@ -3,6 +3,7 @@
 Minimal figure generator that consumes a small data-driven figure spec (JSON), a style profile, and emits an SVG.
 Supported: simple linear scales, axes (bottom/left), and marks: line, point, bar. Intended as a lightweight layer on top of pipeline_b.
 This version also writes a companion .meta.json manifest with provenance info (spec path, style path, generator version, timestamp, artifact sha256/size) and includes Git commit SHA when available.
+Added lightweight categorical legend support when a mark uses encoding.color.field.
 """
 import json
 import argparse
@@ -13,7 +14,7 @@ import hashlib
 import datetime
 import subprocess
 
-__version__ = "0.1"
+__version__ = "0.2"
 
 
 def load_json(p):
@@ -75,6 +76,7 @@ def generate_figure(spec, style, out_path):
     layer_axes = dwg.g(id='layer-axes')
     layer_marks = dwg.g(id='layer-marks')
     layer_ann = dwg.g(id='layer-annotations')
+    layer_legend = dwg.g(id='layer-legend')
 
     layer_bg.add(dwg.rect(insert=(0,0), size=(canvas_w, canvas_h), fill=bg_color))
 
@@ -130,14 +132,48 @@ def generate_figure(spec, style, out_path):
     plot_area = (left, top, plot_w, plot_h)
     draw_axes(dwg, layer_axes, scales, style, plot_area, margin)
 
+    # prepare legend info: mapping categories to colors when encoding.color.field is used
+    legend_entries = []  # list of (label, color)
+    # find first mark with color.field
+    for mark in spec.get('marks', []):
+        enc = mark.get('encoding', {})
+        color_enc = enc.get('color', {})
+        if 'field' in color_enc:
+            field = color_enc['field']
+            # collect unique categories from dataset
+            values = [row.get(field) for row in data_map.get(mark['from'], []) if row.get(field) is not None]
+            cats = []
+            for v in values:
+                if v not in cats:
+                    cats.append(v)
+            # pick colormap
+            cmap_name = color_enc.get('map') or 'qualitative'
+            colormap = style.get('colormaps', {}).get(cmap_name, style.get('colormaps', {}).get('qualitative', ['#1b7a4a', '#ffd166']))
+            for i, cat in enumerate(cats):
+                color = colormap[i % len(colormap)]
+                legend_entries.append((str(cat), color))
+            break
+
     # render marks
     for mark in spec.get('marks', []):
         mtype = mark['type']
         dataset = data_map.get(mark['from'], [])
         enc = mark.get('encoding', {})
-        color_val = enc.get('color', {}).get('value', style['colors'].get('primary'))
+        # determine color function
+        color_enc = enc.get('color', {})
+        def color_for_row(row):
+            if 'value' in color_enc:
+                return color_enc['value']
+            if 'field' in color_enc:
+                v = row.get(color_enc['field'])
+                # find in legend_entries
+                for label, col in legend_entries:
+                    if label == str(v):
+                        return col
+                # fallback
+                return style['colors'].get('primary')
+            return style['colors'].get('primary')
         size_val = enc.get('size', {}).get('value', 6)
-        # compute pixel coords
         pts = []
         for row in dataset:
             x = row.get(enc['x']['field'])
@@ -146,32 +182,49 @@ def generate_figure(spec, style, out_path):
                 continue
             sx = scales[enc['x']['scale']]['scale'](x)
             sy = scales[enc['y']['scale']]['scale'](y)
-            pts.append((sx, sy))
+            pts.append((sx, sy, row))
         if mtype == 'line' and pts:
-            layer_marks.add(dwg.polyline(points=pts, fill='none', stroke=color_val, stroke_width=style.get('line', {}).get('width', 1.5)))
+            pts_xy = [(p[0], p[1]) for p in pts]
+            layer_marks.add(dwg.polyline(points=pts_xy, fill='none', stroke=color_for_row(pts[0][2]), stroke_width=style.get('line', {}).get('width', 1.5)))
         if mtype == 'point' and pts:
-            for (sx, sy) in pts:
-                layer_marks.add(dwg.circle(center=(sx, sy), r=size_val, fill=color_val, stroke='none'))
+            for (sx, sy, row) in pts:
+                c = color_for_row(row)
+                layer_marks.add(dwg.circle(center=(sx, sy), r=size_val, fill=c, stroke='none'))
         if mtype == 'bar' and pts:
-            # treat x as discrete positions; simple bar width from style tokens
             bar_w = style.get('plot_tokens', {}).get('bar_width', 0.8)
-            # compute pixel width: approximate spacing between x ticks
             if len(pts) > 1:
                 pixel_w = abs(pts[1][0] - pts[0][0]) * bar_w
             else:
                 pixel_w = 10
-            for (sx, sy), row in zip(pts, dataset):
-                # baseline at y corresponding to 0
+            for (sx, sy, row) in pts:
                 base = scales['yscale']['scale'](0) if 'yscale' in scales else bottom
                 x_left = sx - pixel_w/2
                 h = abs(base - sy)
                 y_top = min(base, sy)
-                layer_marks.add(dwg.rect(insert=(x_left, y_top), size=(pixel_w, h), fill=color_val))
+                layer_marks.add(dwg.rect(insert=(x_left, y_top), size=(pixel_w, h), fill=color_for_row(row)))
+
+    # render legend if entries exist
+    if legend_entries:
+        # place legend in top-right corner inside margin
+        legend_x = right - 160
+        legend_y = top + 10
+        spacing = 18
+        sw = 12
+        font_size = style.get('fonts', {}).get('label', {}).get('size', 12)
+        lg = dwg.g(id='legend', class_='legend')
+        for i, (label, color) in enumerate(legend_entries):
+            y = legend_y + i * spacing
+            rect = dwg.rect(insert=(legend_x, y), size=(sw, sw), fill=color, stroke='none')
+            text = dwg.text(label, insert=(legend_x + sw + 6, y + sw - 2), font_size=font_size, fill=style['colors'].get('text', '#111'))
+            lg.add(rect)
+            lg.add(text)
+        layer_legend.add(lg)
 
     # assemble
     dwg.add(layer_bg)
     dwg.add(layer_axes)
     dwg.add(layer_marks)
+    dwg.add(layer_legend)
     dwg.add(layer_ann)
 
     # metadata
