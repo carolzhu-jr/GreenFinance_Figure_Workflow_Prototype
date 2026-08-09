@@ -2,7 +2,7 @@
 """
 Minimal figure generator that consumes a small data-driven figure spec (JSON), a style profile, and emits an SVG.
 Supported: simple linear scales, axes (bottom/left), and marks: line, point, bar. Intended as a lightweight layer on top of pipeline_b.
-This version also writes a companion .meta.json manifest with provenance info (spec path, style path, generator version, timestamp, artifact sha256/size).
+This version also writes a companion .meta.json manifest with provenance info (spec path, style path, generator version, timestamp, artifact sha256/size) and includes Git commit SHA when available.
 """
 import json
 import argparse
@@ -11,12 +11,14 @@ import svgwrite
 import math
 import hashlib
 import datetime
-import os
+import subprocess
 
 __version__ = "0.1"
 
+
 def load_json(p):
     return json.loads(Path(p).read_text())
+
 
 def compute_scale(domain, range_):
     d0, d1 = domain
@@ -26,6 +28,7 @@ def compute_scale(domain, range_):
             return (r0 + r1) / 2
         return r0 + (v - d0) * (r1 - r0) / (d1 - d0)
     return scale
+
 
 def draw_axes(dwg, layer_axes, scales, style, plot_area, margins):
     # plot_area: (left, top, width, height)
@@ -58,6 +61,7 @@ def draw_axes(dwg, layer_axes, scales, style, plot_area, margins):
             # sy is pixel y (smaller at top) - draw tick
             layer_axes.add(dwg.line(start=(x0-6, sy), end=(x0, sy), stroke=tick_color))
             layer_axes.add(dwg.text(str(round(tval,2)), insert=(x0-40, sy+4), font_size=font_size, fill=axis_color))
+
 
 def generate_figure(spec, style, out_path):
     canvas_w = style['canvas'].get('width_px', 1200)
@@ -175,6 +179,14 @@ def generate_figure(spec, style, out_path):
     dwg.save()
 
 
+def get_git_commit_sha():
+    try:
+        out = subprocess.check_output(['git', 'rev-parse', 'HEAD'], stderr=subprocess.DEVNULL)
+        return out.decode('utf-8').strip()
+    except Exception:
+        return None
+
+
 def write_manifest(out_path, spec_path, style_path, style):
     # compute file size and sha256
     p = Path(out_path)
@@ -189,6 +201,9 @@ def write_manifest(out_path, spec_path, style_path, style):
             sha256 = hashlib.sha256(data).hexdigest()
     except Exception:
         sha256 = None
+
+    commit_sha = get_git_commit_sha()
+
     manifest = {
         'spec_path': str(spec_path),
         'style_path': str(style_path),
@@ -196,6 +211,7 @@ def write_manifest(out_path, spec_path, style_path, style):
         'style_version': style.get('version'),
         'generator': {'name': 'generate_figure_svg.py', 'version': __version__},
         'timestamp': datetime.datetime.utcnow().isoformat() + 'Z',
+        'commit_sha': commit_sha,
         'artifact': {
             'path': str(out_path),
             'size_bytes': size,
