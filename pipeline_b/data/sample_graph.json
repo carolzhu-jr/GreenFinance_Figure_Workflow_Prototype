@@ -1,12 +1,14 @@
 {
-  "meta": { "id": "sample-1", "title": "Simple flow" },
+  "meta": { "id": "sample-extended", "title": "Extended node-edge example" },
   "nodes": [
-    { "id": "n1", "label": "Emissions Data", "x": 160, "y": 160 },
-    { "id": "n2", "label": "Processing", "x": 420, "y": 160 },
-    { "id": "n3", "label": "Plot / Figure", "x": 680, "y": 160 }
+    { "id": "n1", "label": "Emissions Data", "x": 160, "y": 160, "role": "data", "metadata": { "source": "dataset_A" } },
+    { "id": "n2", "label": "Processing", "x": 420, "y": 160, "role": "process", "width": 180, "height": 56, "metadata": { "step": 2 } },
+    { "id": "n3", "label": "Model", "x": 680, "y": 160, "role": "model", "shape": "ellipse", "metadata": { "model": "regression" } },
+    { "id": "n4", "label": "Result", "x": 420, "y": 320, "role": "result", "shape": "circle", "metadata": { "note": "secondary" } }
   ],
   "edges": [
-    { "id": "e1", "source": "n1", "target": "n2", "label": "clean" },
-    { "id": "e2", "source": "n2", "target": "n3", "label": "summarize" }
+    { "id": "e1", "source": "n1", "target": "n2", "label": "clean", "marker_end": "none", "stroke_style": "solid", "metadata": { "confidence": 0.95 } },
+    { "id": "e2", "source": "n2", "target": "n3", "label": "train", "marker_end": "arrow", "stroke_style": "solid" },
+    { "id": "e3", "source": "n3", "target": "n4", "label": "predict", "marker_end": "arrow", "stroke_style": "dashed", "waypoints": [[760,220],[720,260]] }
   ]
 }

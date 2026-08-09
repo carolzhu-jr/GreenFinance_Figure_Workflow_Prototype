@@ -1,46 +1,11 @@
-# GreenFinance Figure Workflow Prototype
 
-This repository is a lightweight prototype for exploring three small components for academic visualization workflows:
+node-edge schema and richer diagram support
 
-- A JSON-based Design System / Style Profile (profiles/default_style.json)
-- Pipeline B: Structured node-edge -> editable SVG generator (pipeline_b/)
-- Pipeline A: AI concept illustration experiment scaffold (pipeline_a/)
+New file: profiles/node_edge_schema.json — a JSON Schema describing nodes and edges with optional shape, role, size overrides, waypoints, markers, and metadata.
 
-This prototype intentionally keeps implementation minimal and does NOT reimplement or copy the HypoWeaver backend, renderer, or figure recipes. It is designed for quick experiments and human-reviewed outputs.
+pipeline_b/data/sample_graph.json — updated to show examples of roles, custom node size, arrow markers, dashed edge and metadata examples.
 
-Quick start (Unix/Mac):
+pipeline_b/generate_svg.py — updated to read the richer node/edge fields, render shapes (rect/circle/ellipse), dashed edges, arrow markers (via <defs>/marker), and emit named layers (layer-background, layer-edges, layer-nodes, layer-annotations). Metadata for nodes and edges is embedded in <desc> elements.
 
-1. Create a virtual environment and install dependencies
+tests/test_node_edge_schema.py — validates sample_graph.json against the new schema, runs the generator, and checks that SVG contains node/edge metadata.
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
-
-2. Generate the example SVG (Pipeline B)
-
-```bash
-python pipeline_b/generate_svg.py --data pipeline_b/data/sample_graph.json --style profiles/default_style.json --out pipeline_b/examples/sample_diagram_generated.svg
-```
-
-3. Run the AI experiment scaffold (Pipeline A) — this is a stub that writes placeholders
-
-```bash
-python pipeline_a/generate_images.py --prompts pipeline_a/prompts.yaml --outdir pipeline_a/examples
-```
-
-See docs/USAGE.md for more details.
-
-
-style profile → pipeline_b generator → editable SVG
-
-Pipeline B (pipeline_b/generate_svg.py) consumes the JSON-based style profile at profiles/default_style.json. The generator reads tokens such as:
-
-- colors.background, colors.primary, colors.muted, colors.text
-- fonts.label.size
-- line.width
-- node.default_width, node.default_height, node.rx, node.stroke_width
-- canvas.width_px, canvas.height_px
-
-The SVG produced keeps each node and edge in its own <g id="..."> group and embeds metadata in <desc> elements for round-tripping in vector editors (e.g., Inkscape or Illustrator). Edge labels (if present in the input JSON) are rendered near the midpoint of the edge using the annotation font size when available.

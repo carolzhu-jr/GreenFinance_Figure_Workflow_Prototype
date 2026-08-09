@@ -1,3 +1,4 @@
 svgwrite>=1.4.1
 PyYAML>=6.0
 requests>=2.28
+jsonschema>=4.0.0

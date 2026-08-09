@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Node-Edge Diagram Schema",
+  "description": "Schema for node-edge JSON used by pipeline_b; nodes and edges describe editable diagram elements.",
+  "type": "object",
+  "required": ["nodes", "edges"],
+  "properties": {
+    "meta": {
+      "type": "object"
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "x", "y"],
+        "properties": {
+          "id": { "type": "string" },
+          "label": { "type": "string" },
+          "x": { "type": "number" },
+          "y": { "type": "number" },
+          "width": { "type": "number" },
+          "height": { "type": "number" },
+          "shape": { "type": "string", "enum": ["rect", "circle", "ellipse"] },
+          "role": { "type": "string", "enum": ["data", "process", "model", "result", "annotation"] },
+          "style": { "type": "string" },
+          "metadata": { "type": "object" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["target", "source"],
+        "properties": {
+          "id": { "type": "string" },
+          "source": { "type": "string" },
+          "target": { "type": "string" },
+          "label": { "type": "string" },
+          "marker_end": { "type": "string", "enum": ["arrow", "none"] },
+          "stroke_style": { "type": "string", "enum": ["solid", "dashed"] },
+          "waypoints": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": { "type": "number" },
+              "minItems": 2,
+              "maxItems": 2
+            }
+          },
+          "metadata": { "type": "object" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
