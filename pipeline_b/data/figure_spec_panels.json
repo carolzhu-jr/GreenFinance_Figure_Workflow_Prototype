@@ -1,0 +1,32 @@
+{
+  "meta": { "title": "Panels example" },
+  "data": [
+    {
+      "name": "A",
+      "values": [
+        { "x": 0, "y": 1 },
+        { "x": 1, "y": 2 },
+        { "x": 2, "y": 1.5 }
+      ]
+    },
+    {
+      "name": "B",
+      "values": [
+        { "x": 0, "y": 2 },
+        { "x": 1, "y": 1 },
+        { "x": 2, "y": 2.5 }
+      ]
+    }
+  ],
+  "scales": {
+    "xscale": { "type": "linear" },
+    "yscale": { "type": "linear" }
+  },
+  "panels": {
+    "layout": { "rows": 1, "cols": 2 },
+    "panels": [
+      { "row": 0, "col": 0, "title": "Series A", "marks": [ { "type": "line", "from": "A", "encoding": { "x": { "field": "x", "scale": "xscale" }, "y": { "field": "y", "scale": "yscale" }, "color": { "value": "#1b7a4a" } } } ] },
+      { "row": 0, "col": 1, "title": "Series B", "marks": [ { "type": "line", "from": "B", "encoding": { "x": { "field": "x", "scale": "xscale" }, "y": { "field": "y", "scale": "yscale" }, "color": { "value": "#ffd166" } } } ] }
+    ]
+  }
+}
