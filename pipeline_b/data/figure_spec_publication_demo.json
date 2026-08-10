@@ -1,0 +1,22 @@
+{
+  "meta": { "title": "Publication demo: 2x2 multi-panel figure" },
+  "data": [
+    { "name": "S1", "values": [ { "x": 0, "y": 1 }, { "x": 1, "y": 1.5 }, { "x": 2, "y": 2 }, { "x": 3, "y": 2.2 } ] },
+    { "name": "S2", "values": [ { "x": 0, "y": 0.8 }, { "x": 1, "y": 1.1 }, { "x": 2, "y": 1.8 }, { "x": 3, "y": 2.6 } ] },
+    { "name": "S3", "values": [ { "x": 0, "y": 0.5 }, { "x": 1, "y": 1.0 }, { "x": 2, "y": 1.2 }, { "x": 3, "y": 1.9 } ] },
+    { "name": "S4", "values": [ { "x": 0, "y": 1.2 }, { "x": 1, "y": 1.7 }, { "x": 2, "y": 1.9 }, { "x": 3, "y": 2.8 } ] }
+  ],
+  "scales": {
+    "xscale": { "type": "linear" },
+    "yscale": { "type": "linear" }
+  },
+  "panels": {
+    "layout": { "rows": 2, "cols": 2 },
+    "panels": [
+      { "row": 0, "col": 0, "title": "(A) Scenario 1", "marks": [ { "type": "line", "from": "S1", "encoding": { "x": { "field": "x", "scale": "xscale" }, "y": { "field": "y", "scale": "yscale" }, "color": { "value": "#1b7a4a" } } } ] },
+      { "row": 0, "col": 1, "title": "(B) Scenario 2", "marks": [ { "type": "line", "from": "S2", "encoding": { "x": { "field": "x", "scale": "xscale" }, "y": { "field": "y", "scale": "yscale" }, "color": { "value": "#ffd166" } } } ] },
+      { "row": 1, "col": 0, "title": "(C) Scenario 3", "marks": [ { "type": "line", "from": "S3", "encoding": { "x": { "field": "x", "scale": "xscale" }, "y": { "field": "y", "scale": "yscale" }, "color": { "value": "#4a90e2" } } } ] },
+      { "row": 1, "col": 1, "title": "(D) Scenario 4", "marks": [ { "type": "line", "from": "S4", "encoding": { "x": { "field": "x", "scale": "xscale" }, "y": { "field": "y", "scale": "yscale" }, "color": { "value": "#d62828" } } } ] }
+    ]
+  }
+}
